@@ -1,0 +1,19 @@
+language: python
+
+python:
+  - 3.8.3
+
+install:
+  - pip install -r helloworld/requirements.txt
+
+before_script:
+  - python helloworld/manage.py migrate
+  - python helloworld/manage.py collectstatic --noinput
+script:
+  - black --check .
+  - flake8 .
+  - cd helloworld
+  - coverage run --source=polls manage.py test
+
+after_script:
+  - coveralls
